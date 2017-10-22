@@ -1,6 +1,6 @@
 package com.tcarev.tests.testtgbot.commands;
 
-import com.tcarev.tests.testtgbot.persistance.ChatMessageRepo;
+import com.tcarev.tests.testtgbot.persistance.PersistedChatMessageRepo;
 import com.tcarev.tests.testtgbot.tg.StringSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 public class ClearCommand extends BaseCommand {
 
     @Autowired
-    private ChatMessageRepo messageRepo;
+    private PersistedChatMessageRepo messageRepo;
 
     /**
      * Message to send when clear command is invoked.

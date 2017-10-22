@@ -8,27 +8,27 @@ import javax.persistence.Id;
  * Class for persisting chat message.
  */
 @Entity
-public class ChatMessage {
+public class PersistedChatMessage {
 
     private @Id @GeneratedValue Long id;
 
-    private String message;
+    private long chatId;
 
-    private Long chatId;
+    private byte[] messageData;
 
-    public ChatMessage() {
+    public PersistedChatMessage() {
     }
 
-    public ChatMessage(String message, Long chatId) {
-        this.message = message;
+    public PersistedChatMessage(long chatId, byte[] messageData) {
         this.chatId = chatId;
+        this.messageData = messageData;
     }
 
-    public String getMessage() {
-        return message;
+    public byte[] getMessageData() {
+        return messageData;
     }
 
-    public Long getChatId() {
+    public long getChatId() {
         return chatId;
     }
 }

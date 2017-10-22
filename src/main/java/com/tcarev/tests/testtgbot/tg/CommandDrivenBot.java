@@ -2,7 +2,8 @@ package com.tcarev.tests.testtgbot.tg;
 
 import com.tcarev.tests.testtgbot.commands.BaseCommand;
 import com.tcarev.tests.testtgbot.commands.CommandManager;
-import com.tcarev.tests.testtgbot.persistance.ChatMessage;
+import com.tcarev.tests.testtgbot.persistance.PersistedChatMessage;
+import com.tcarev.tests.testtgbot.processors.CommonProcessedMessage;
 import com.tcarev.tests.testtgbot.processors.MessageProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
@@ -15,6 +16,9 @@ import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
+import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
 
 /**
  * Simple {@link TelegramLongPollingBot}implementation. Is responsible for
@@ -50,7 +54,7 @@ public class CommandDrivenBot extends TelegramLongPollingBot implements MessageS
                 BaseCommand command = commandManager.getCommand(msgText);
                 command.doAction(chatId, messageSendCallback);
             } else {
-                messageProcessor.processMessage(chatId, msgText, messageSendCallback);
+                messageProcessor.processMessage(updateMsg, messageSendCallback);
             }
         }
         update.getMessage().isCommand();
@@ -73,8 +77,15 @@ public class CommandDrivenBot extends TelegramLongPollingBot implements MessageS
 
     /** {@inheritDoc} */
     @Override
-    public void sendMessage(ChatMessage message) {
-        sendMessage(message.getChatId(), message.getMessage());
+    public void sendMessage(PersistedChatMessage message) {
+        byte[] messageData = message.getMessageData();
+        try {
+            ObjectInputStream objectInput = new ObjectInputStream(new ByteArrayInputStream(messageData));
+            CommonProcessedMessage processedMessage = (CommonProcessedMessage) objectInput.readObject();
+            processedMessage.print(this);
+        } catch (IOException | ClassNotFoundException | TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 
     @PostConstruct

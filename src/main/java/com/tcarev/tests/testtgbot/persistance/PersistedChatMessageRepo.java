@@ -8,12 +8,12 @@ import java.util.List;
 /**
  * Chat message repository.
  */
-public interface ChatMessageRepo extends CrudRepository<ChatMessage, Long> {
+public interface PersistedChatMessageRepo extends CrudRepository<PersistedChatMessage, Long> {
 
     /**
      * Query by chatId.
      */
-    List<ChatMessage> findAllByChatId(Long chatId);
+    List<PersistedChatMessage> findAllByChatId(Long chatId);
 
     /**
      * Delete all chat messages for custom chatId.

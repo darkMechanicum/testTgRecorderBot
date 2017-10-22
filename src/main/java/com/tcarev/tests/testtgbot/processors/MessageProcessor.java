@@ -1,12 +1,15 @@
 package com.tcarev.tests.testtgbot.processors;
 
-import com.tcarev.tests.testtgbot.persistance.ChatMessage;
-import com.tcarev.tests.testtgbot.persistance.ChatMessageRepo;
+import com.tcarev.tests.testtgbot.persistance.PersistedChatMessage;
+import com.tcarev.tests.testtgbot.persistance.PersistedChatMessageRepo;
 import com.tcarev.tests.testtgbot.tg.StringSender;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
+import org.telegram.telegrambots.api.objects.Message;
+
+import java.io.*;
 
 /**
  * Processes all incoming messages, but not commands.
@@ -26,7 +29,10 @@ public class MessageProcessor {
     private final boolean needPrintProcessMessage;
 
     @Autowired
-    private ChatMessageRepo messageRepo;
+    private PersistedChatMessageRepo messageRepo;
+
+    @Autowired
+    private ProcessedMessageFactory messageFactory;
 
     /**
      * Started flag.
@@ -45,18 +51,29 @@ public class MessageProcessor {
     /**
      * Process incoming user message.
      *
-     * @param chatId chat where message was sent
-     * @param message user message text
+     * @param message user message
      * @param stringSender callback to print to chat
      */
-    public void processMessage(Long chatId, String message, StringSender stringSender) {
+    public void processMessage(Message message, StringSender stringSender) {
         if (!isStarted) {
             return;
         }
+
         if (needPrintProcessMessage) {
             stringSender.sendString(processMessage);
         }
-        messageRepo.save(new ChatMessage(message, chatId));
+
+        CommonProcessedMessage processedMessage = messageFactory.createdProcessedMessage(message);
+        try {
+            ByteArrayOutputStream byteOut = new ByteArrayOutputStream();
+            ObjectOutputStream objectOutputStream = new ObjectOutputStream(byteOut);
+            objectOutputStream.writeObject(processedMessage);
+            objectOutputStream.flush();
+            byte[] data = byteOut.toByteArray();
+            messageRepo.save(new PersistedChatMessage(message.getChatId(), data));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     public void start() {
