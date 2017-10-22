@@ -11,6 +11,9 @@ import java.util.Collection;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 
+/**
+ * Registers all commands.
+ */
 @Component
 @Scope("singleton")
 public class CommandManager {

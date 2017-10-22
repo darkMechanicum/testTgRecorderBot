@@ -27,4 +27,8 @@ public class ChatMessage {
     public String getMessage() {
         return message;
     }
+
+    public Long getChatId() {
+        return chatId;
+    }
 }

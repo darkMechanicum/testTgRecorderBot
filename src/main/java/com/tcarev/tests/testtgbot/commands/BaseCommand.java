@@ -1,7 +1,6 @@
 package com.tcarev.tests.testtgbot.commands;
 
-import com.tcarev.tests.testtgbot.persistance.ChatMessageRepo;
-import com.tcarev.tests.testtgbot.tg.MessageSender;
+import com.tcarev.tests.testtgbot.tg.StringSender;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import javax.annotation.PostConstruct;
@@ -22,13 +21,10 @@ public abstract class BaseCommand {
     private final String commandDescription;
 
     /**
-     * Command manager to auto register.
+     * Command manager for auto register.
      */
     @Autowired
     private CommandManager commandManager;
-
-    @Autowired
-    private ChatMessageRepo messageRepo;
 
     protected BaseCommand(String commandCode, String commandDescription) {
         this.commandCode = commandCode;
@@ -38,21 +34,17 @@ public abstract class BaseCommand {
     /**
      * Run the command logic.
      */
-    public abstract void doAction(Long chatIt, MessageSender sender);
+    public abstract void doAction(Long chatIt, StringSender sender);
 
-    protected final ChatMessageRepo getMessageRepo() {
-        return messageRepo;
-    }
-
-    public String getCommandCode() {
+    String getCommandCode() {
         return commandCode;
     }
 
-    public String getCommandDescription() {
+    String getCommandDescription() {
         return commandDescription;
     }
 
-    public CommandManager getCommandManager() {
+    CommandManager getCommandManager() {
         return commandManager;
     }
 

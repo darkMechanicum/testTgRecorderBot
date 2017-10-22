@@ -1,6 +1,14 @@
 package com.tcarev.tests.testtgbot.tg;
 
-@FunctionalInterface
+import com.tcarev.tests.testtgbot.persistance.ChatMessage;
+
+/**
+ * Simple interface to send chat messages.
+ */
 public interface MessageSender {
-    void sendMessage(String messafeText);
+
+    /**
+     * Send chat message.
+     */
+    void sendMessage(ChatMessage message);
 }

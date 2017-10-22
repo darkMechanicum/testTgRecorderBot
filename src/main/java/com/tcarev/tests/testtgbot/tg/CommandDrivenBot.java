@@ -2,11 +2,11 @@ package com.tcarev.tests.testtgbot.tg;
 
 import com.tcarev.tests.testtgbot.commands.BaseCommand;
 import com.tcarev.tests.testtgbot.commands.CommandManager;
+import com.tcarev.tests.testtgbot.persistance.ChatMessage;
 import com.tcarev.tests.testtgbot.processors.MessageProcessor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Scope;
 import org.springframework.stereotype.Component;
-import org.telegram.telegrambots.ApiContextInitializer;
 import org.telegram.telegrambots.TelegramBotsApi;
 import org.telegram.telegrambots.api.methods.send.SendMessage;
 import org.telegram.telegrambots.api.objects.Message;
@@ -16,9 +16,13 @@ import org.telegram.telegrambots.exceptions.TelegramApiException;
 
 import javax.annotation.PostConstruct;
 
+/**
+ * Simple {@link TelegramLongPollingBot}implementation. Is responsible for
+ * message receiving, invoking commands and command processor, and message sending.
+ */
 @Component
 @Scope("singleton")
-public class CommandDrivenBot extends TelegramLongPollingBot {
+public class CommandDrivenBot extends TelegramLongPollingBot implements MessageSender {
 
     @Autowired
     private CommandManager commandManager;
@@ -40,7 +44,7 @@ public class CommandDrivenBot extends TelegramLongPollingBot {
             final Long chatId = updateMsg.getChatId();
 
             // Callback tied to chat id.
-            MessageSender messageSendCallback = message -> this.sendMessage(chatId, message);
+            StringSender messageSendCallback = message -> this.sendMessage(chatId, message);
 
             if (updateMsg.isCommand()) {
                 BaseCommand command = commandManager.getCommand(msgText);
@@ -53,6 +57,9 @@ public class CommandDrivenBot extends TelegramLongPollingBot {
 
     }
 
+    /**
+     * Send string chat message.
+     */
     public void sendMessage(Long chatId, String message) {
         SendMessage sendMessage = new SendMessage() // Create a SendMessage object with mandatory fields
                 .setChatId(chatId)
@@ -62,6 +69,12 @@ public class CommandDrivenBot extends TelegramLongPollingBot {
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+    }
+
+    /** {@inheritDoc} */
+    @Override
+    public void sendMessage(ChatMessage message) {
+        sendMessage(message.getChatId(), message.getMessage());
     }
 
     @PostConstruct
@@ -82,5 +95,4 @@ public class CommandDrivenBot extends TelegramLongPollingBot {
     public String getBotToken() {
         return "407978013:AAE7Ll26dVbj8goSK5_-qt-f2xNe9eBUVr4";
     }
-
 }
