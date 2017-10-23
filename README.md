@@ -31,6 +31,12 @@ Options you need to change are:
 Third, run maven goal `mvn clean spring-boot:repackage`.
 As the result of the build in your `target` directory should be builded jar. You can use it to run the bot with `java -jar <jarname.jar>`.
 
+_Or_
+
+You can run the application with `mvn clean spring-boot:run`.
+
+_More_ about spring boot applications launch at spring boot reference guide: https://docs.spring.io/spring-boot/docs/current-SNAPSHOT/reference/htmlsingle/
+
 # Supported tg messages and chats:
 Bot was tested only in private chat with it, no groups or channels.
 Bot supports recording documents, images, audio, video, stickers and plain text messages. No captions or reply headers are supported.
