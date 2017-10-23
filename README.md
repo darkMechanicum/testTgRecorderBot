@@ -20,6 +20,14 @@ Second, configure the bot with properties, defined in `application.properties` f
 1. Database connection info.
 2. Command codes.
 3. Command ouput.
+
+Options you need to change are:
+1. spring.datasource.url - Your database url.
+2. spring.datasource.username - DB username.
+3. spring.datasource.password - DB password.
+4. test-tg-bot.bot-token - Telegram bot token.
+5. test-tg-bot.bot-name Telegram bot name.
+
 Third, run maven goal `mvn clean spring-boot:repackage`.
 As the result of the build in your `target` directory should be builded jar. You can use it to run the bot with `java -jar <jarname.jar>`.
 
