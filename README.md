@@ -39,5 +39,9 @@ _More_ about spring boot applications launch at spring boot reference guide: htt
 
 # Supported tg messages and chats:
 Bot was tested only in private chat with it, no groups or channels.
-Bot supports recording documents, images, audio, video, stickers and plain text messages. No captions or reply headers are supported.
-Bot persists only the identifiers of documents and media files, so, if they are removed from server it wont be possible to restore them.
+
+Bot supports recording documents, images, audio, video, stickers and plain text messages. 
+
+No captions or reply headers are supported.
+
+Bot persists only __the identifiers of documents and media files__, so, if they are removed from server it wont be possible to restore them.
