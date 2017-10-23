@@ -28,6 +28,12 @@ import java.io.ObjectInputStream;
 @Scope("singleton")
 public class CommandDrivenBot extends TelegramLongPollingBot implements MessageSender {
 
+    @Value("${test-tg-bot.bot-token}")
+    private String botToken;
+    
+    @Value("${test-tg-bot.bot-name}")
+    private String botName;
+    
     @Autowired
     private CommandManager commandManager;
 
@@ -99,11 +105,11 @@ public class CommandDrivenBot extends TelegramLongPollingBot implements MessageS
         }
     }
 
-    public String getBotUsername() {
-        return "tcarevTestBot";
+    public final String getBotUsername() {
+        return botName;
     }
 
-    public String getBotToken() {
-        return "407978013:AAE7Ll26dVbj8goSK5_-qt-f2xNe9eBUVr4";
+    public final String getBotToken() {
+        return botToken;
     }
 }
